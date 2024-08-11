@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      style="
+        text-align: center;
+        justify-content: center;
+        height: 50vh;
+        row-gap: 2px;
+      "
+    >
+      <h1>Welcome to the chat app!</h1>
+      <b>Please enter your details below for education purposes!</b>
+      <form
+        id="message-form"
+        style="
+          display: flex;
+          flex-direction: column;
+          margin-top: 10vh;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        "
+      >
+        <input
+          name="message"
+          type="text"
+          placeholder="Enter your message here!"
+          style="
+            margin-top: 5px;
+            border-radius: 5px;
+            min-width: 30vw;
+            padding: 15px;
+          "
+        />
+        <button
+          type="submit"
+          style="padding: 15px; border-radius: 5px; margin-top: 5px"
+        >
+          Submit
+        </button>
+      </form>
+      <button
+        id="sendLocation"
+        style="padding: 15px; border-radius: 5px; margin-top: 5px"
+      >
+        Send Location
+      </button>
+    </div>
+    <div id="messages"></div>
+    <script id="message-template" type="text/html">
+        <div>
+            <p>{{createdAt}} - {{message}}</p>
+        </div>
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
+  </body>
+</html>
