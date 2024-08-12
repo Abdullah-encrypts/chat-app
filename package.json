@@ -4,8 +4,8 @@
   "description": "real time chat app using socket.io",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
   },
   "author": "abdullah",
   "license": "ISC",
