@@ -1,11 +1,12 @@
+const capitalizeFirstLetter = require("./functions");
 const users = [];
 
 // addUser, removeUser, getUser, getUsersInRoom
 
 const addUser = ({ id, username, room }) => {
   //clean the data
-  username = username.trim().toLowerCase();
-  room = room.trim().toLowerCase();
+  username = capitalizeFirstLetter(username.trim());
+  room = capitalizeFirstLetter(room.trim());
 
   //validate data
   if (!username || !room) {
@@ -40,21 +41,21 @@ const removeUser = (id) => {
 };
 
 const getUser = (id) => {
-    const user = users.find((user) => user.id === id)
+  const user = users.find((user) => user.id === id);
 
-    return user 
-}
+  return user;
+};
 
-const getUsersInRoom = (room) => { 
-    room = room.trim().toLowerCase()
-    const res = users.filter((user) => user.room === room)
-    
-    return res 
- }
+const getUsersInRoom = (room) => {
+  room = capitalizeFirstLetter(room.trim());
+  const res = users.filter((user) => user.room === room);
+
+  return res;
+};
 
 module.exports = {
-    addUser,
-    removeUser,
-    getUser,
-    getUsersInRoom
-}
+  addUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+};
