@@ -3,7 +3,8 @@ const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
 const Baddie = require("bad-words");
-const {generateMessage} = require('./utils/messages')
+const {generateMessage, generateLocationMessage} = require('./utils/messages')
+const {addUser, getUser, getUsersInRoom, removeUser} = require('./utils/users')
 
 const app = express();
 const server = http.createServer(app);
@@ -17,27 +18,48 @@ app.use(express.static(publicDirectoryPath));
 io.on("connection", (socket) => {
   console.log("New websocket connection!");
 
-  socket.emit("message", generateMessage('Welcome!'));
-  socket.broadcast.emit("message", generateMessage("A new user has joined the chat babe!!!"));
+  socket.on('join', (options, callback) => { 
+    const { user, error } = addUser({id: socket.id, ...options})
+
+    if (error) {
+      return callback(error)
+    }
+    
+    socket.join(user.room)
+
+    socket.emit("message", generateMessage('Welcome!'));
+    socket.broadcast.to(user.room).emit("message", generateMessage( `${user.username} has joined the chat babe!!!`));
+
+    callback()
+   })
 
   socket.on("sendMessage", (message, callback) => {
+
+    const user = getUser(socket.id)
+
     const baddie = new Baddie();
 
     if (baddie.isProfane(message)) {
       return callback("No bad things allowed even for baddies!");
     }
-    io.emit("message", generateMessage(message));
+
+    io.to(user.room).emit("message", generateMessage(message));
     callback("Message delivered!");
   });
 
   socket.on("disconnect", () => {
-    io.emit("message", generateMessage("Perdon! A user has left the chat :("));
+    const user = removeUser(socket.id)
+
+    if(user){
+      io.to(user.room).emit("message", generateMessage(`Perdon! ${user.username} has left the chat :(`));
+    }
   });
 
   socket.on("sendLocation", (locationData, callback) => {
-    io.emit(
-      "message",
-      `https://google.com/maps?q=${locationData.latitude},${locationData.longitude}`
+    const user = getUser(socket.id)
+    io.to(user.room).emit(
+      "locationMessage",
+      generateLocationMessage(`https://google.com/maps?q=${locationData.latitude},${locationData.longitude}`)
     );
     callback('Location sent!')
   });
