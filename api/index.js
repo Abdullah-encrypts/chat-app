@@ -6,13 +6,13 @@ const Baddie = require("bad-words");
 const {
   generateMessage,
   generateLocationMessage,
-} = require("./utils/messages");
+} = require("../src/utils/messages");
 const {
   addUser,
   getUser,
   getUsersInRoom,
   removeUser,
-} = require("./utils/users");
+} = require("../src/utils/users");
 
 const app = express();
 const server = http.createServer(app);
